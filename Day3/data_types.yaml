@@ -1,0 +1,18 @@
+-
+# Data types
+firt_name: Andrew #String scalar
+height: 6.2 #Float Scalar
+roll_number: 9 #Integer Scalar
+payment_dues: null #Null Scalar
+address: #Dictionary
+  apt_number: x-002
+  street: my_street
+  state: my_state
+  country: my_country
+hobbies: #List
+  - football
+  - dancing
+  - traveling
+  - skiing  
+
+
