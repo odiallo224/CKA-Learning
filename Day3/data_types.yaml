@@ -9,10 +9,34 @@ address: #Dictionary
   street: my_street
   state: my_state
   country: my_country
+  contact: #Nested Dictionary
+    phone: 0127789223
+    email: yakov@example.com
+    fax: 077301811  
 hobbies: #List
-  - football
+  - singing
   - dancing
   - traveling
-  - skiing  
+  - sports: Nested List  
+      - footbal
+      - hockey
+      - cricket
+education:     #Dictionary with Nested List
+  degrees:
+    - degree: Bachelors
+      field: Mechanical Engineering
+    - degree: Masters
+      field: Robotics
+work_experience:    #List with Nested Dictionary
+  - campany: RXA Corp
+    role: Data Engineer
+    duration: 4 years
+    salary: 100K
+  - company: XYZ Inc
+    role: Manager of Data Engineering
+    duration: 3 years and running
+    salary: 180K  
+
+
 
 
