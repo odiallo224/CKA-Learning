@@ -1,0 +1,19 @@
+apiVersion: v1
+kind: ReplicationController
+metadata:
+  name: nginx-rc
+spec:
+  replicas: 3
+  selector:
+    app: nginx     # Until here, we were defining the properties of the Replication Controller meant to manage the pods we will define bellow 
+    environment: development    # If you have multiple labels defined in the selector portion, the pod MUST HAVE all of them defined as well. 
+  template:        # Pods defintion and properties start here
+    metadata:    
+      labels:
+        app: nginx
+        environment: development  
+    spec:
+      containers:
+        - name: nginx-container
+          image: nginx      
+      

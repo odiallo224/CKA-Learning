@@ -1,0 +1,23 @@
+apiVersion: apps/v1
+kind: ReplicaSet
+metadata:
+  name: rsb-nginx
+spec:
+  replicas: 3
+  selector:
+    matchExpressions:
+      - key: app
+        operator: In  # This tells us that the pod MUST match one of the values defined in the key set of values bellow 
+        values:
+          - nginx
+          - apache  
+  template:    
+    metadata:
+      labels:
+        app: apache
+        environment: development
+    spec:
+      containers:
+        - name: nginx-container
+          image: nginx    
+        
