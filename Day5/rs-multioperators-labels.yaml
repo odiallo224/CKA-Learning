@@ -1,0 +1,33 @@
+apiVersion: apps/v1
+kind: ReplicaSet
+metadata:
+  name: rsb-nginx 
+spec:
+  replicas: 3
+  selector:
+    matchExpressions:
+      - key: app
+        operator: In   #Label key exists and its value matches one of the listed values.
+        values: 
+          - nginx
+          - apache
+      - key: environment
+        operator: NotIn  #Label key is absent or its value is not among the listed values.
+        values: 
+          - prod
+      - key: tier
+        operator: Exists  #Label key exists, regardless of its value.
+      - key: debug
+        operator: DoesNotExist #Label key does not exist.   
+  template:  
+    metadata:
+      labels:
+        app: apache
+        environment: dev
+        tier: frontend
+        # Do not add "debug" label here;
+        # it will break the selector conditions     
+    spec:
+      containers:
+        - name: nginx-container
+          image: nginx 

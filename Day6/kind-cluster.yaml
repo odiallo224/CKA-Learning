@@ -7,6 +7,10 @@ apiVersion: kind.x-k8s.io/v1alpha4
 nodes:
   - role: control-plane
     image: kindest/node:v1.34.8@sha256:02722c2dedddcfc00febf5d27fbeb9b7b2c14294c82109ff4a85d89ac9ba3256 # Replace with the Kubernetes version you want
+    extraPortMappings:
+      - containerPort: 31000 # Port inside the KIND container 
+        hostPort: 31000      # Port on your local machine (host system/server). If this was set to a different port (eg: 9090), you would access the service 
+                             # at localhost:9090, and the traffice would be forwarded to containerPort 31000 inside the KIND cluster.         
   - role: worker
     image: kindest/node:v1.34.8@sha256:02722c2dedddcfc00febf5d27fbeb9b7b2c14294c82109ff4a85d89ac9ba3256
   - role: worker
