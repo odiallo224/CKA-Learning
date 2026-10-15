@@ -1,0 +1,12 @@
+In the previous section we used the declarative (writing the "yaml" file from the scratch) way of creating deployments and services. 
+But this can be time consuming, also we need to be familiar with the kubectl for many reasons such as debuging, testing, etc..
+
+In this part, we practice using the imperative way of creating those k8s objects. 
+We generate yaml output from the kubectl and redirect/append it to a file and edit that file to suit our need.
+
+kubectl create deploy backend-deploy --image=hashicorp/http-echo --port=5678 --dry-run=client -o yaml > backend-deploym.yaml                               # This will create the deployment "backend-deploy"
+kubectl expose deploy backend-deploy --type=ClusterIP --name=backend-svc --port=9090 --target-port=5678 --dry-run=client -o yaml >> backend-deploym.yaml   #this will expose the backend-deploy
+kubectl create deploy frontend-deploy --image=nginx --port=80 --replicas=3 --dry-run=client -o yaml > frontend-deploy.yaml                                 # This will create the deployment "frontend-deploy"          
+kubectl expose deploy frontend-deploy --type=NodePort --port=80 --target-port=80 --name=frontend-svc --dry-run=client -o yaml >> frontend-deploy.yaml      #this will expose the frontend-deploy
+
+
