@@ -1,0 +1,23 @@
+apiVersion: apps/v1
+kind: Deployment
+metadata: 
+  name: taint-toleration
+spec:
+  replicas: 4
+  selector:
+    matchLabels:
+      app: toleration
+  template:
+    metadata:
+      labels:
+        app: toleration
+    spec:
+      containers:
+      - name: taint-pod1
+        image: nginx
+        ports:
+          - containerPort: 80
+      tolerations:
+        - key: "storage"
+          operator: "Exists"
+          effect: "NoSchedule"        

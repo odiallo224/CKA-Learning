@@ -1,0 +1,27 @@
+apiVersion: apps/v1
+kind: Deployment
+metadata:
+  name: multi-taints
+spec:
+  replicas: 5
+  selector:
+    matchLabels:
+      app: myapp
+  template:
+    metadata:
+      labels:
+        app: myapp
+    spec:
+      tolerations:
+        - key: "storage"
+          operator: "Exists"
+          effect: "NoSchedule"
+        - key: "env"
+          operator: "Equal"
+          value: "dev"
+          effect: "NoSchedule"
+      containers:
+      - name: myapp-container
+        image: nginx
+        ports:
+          - containerPort: 80       

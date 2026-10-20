@@ -1,0 +1,11 @@
+apiVersion: v1
+kind: Pod
+metadata: 
+  name: manual-pod
+spec:
+  nodeName: my-second-cluster-control-plane    #This allow us to choose the node                                               # on which the pod is scheduled 
+  containers:
+  - name: nginx-container
+    image: nginx    
+    ports:
+      - containerPort: 80  #this is for documentation purpose only. 
