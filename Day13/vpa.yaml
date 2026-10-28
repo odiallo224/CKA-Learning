@@ -1,0 +1,16 @@
+---
+apiVersion: autoscaling.k8s.io/v1
+kind: VerticalPodAutoscaler
+metadata:
+  name: vpa-deploy
+spec:
+  targetRef:
+    apiVersion: apps/v1
+    kind: Deployment
+    name: vpa-deploy
+  updatePolicy:
+    # updateMode options
+    # "Off"       - VPA only recommend resources, but does NOT apply them
+    # "Initial"   - VPA sets the recommended resources at the pod creation, no changes after that
+    # "Auto"      - VPA automatically updates resources and restarts pods as needed
+    updateMode: "Auto" 
