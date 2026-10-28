@@ -1,0 +1,37 @@
+---
+apiVersion: v1
+kind: Pod
+metadata:
+  name: my-app
+spec:
+  initContainers:
+    - name: init1
+      image: curlimages/curl
+      command:
+        - sh
+        - -c
+        - |
+          echo "Checking API availability..."
+          sleep 20
+          until curl https://kubernetes.io > /dev/null; do  
+            echo "Waiting for API response..."
+            sleep 5
+          done
+          echo " EXternal API is reachable, proceeding to next init container..!"  
+    - name: init2
+      image: busybox      
+      command:
+        - sh
+        - -c
+        - |
+          echo "Checking main-app Service availability..."
+          until nslookup  mydb-svc.default.svc.cluster.local; do
+            echo "Waiting for Service DNS resolution..."
+            sleep 5
+          done
+          echo " Service is reachable, proceeding to main-app container!"  
+  containers:
+    - name: main-app
+      image: nginx
+      ports:
+      - containerPort: 80   

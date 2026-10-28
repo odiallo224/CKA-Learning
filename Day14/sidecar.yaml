@@ -1,0 +1,22 @@
+---
+apiVersion: v1
+kind: Pod
+metadata:
+  name: sidecar
+spec:
+  restartPolicy: Never
+  containers:
+    - name: nginx
+      image: nginx
+      ports:
+        - containerPort: 80
+    - name: health-check
+      image: curlimages/curl
+      command:
+      - sh
+      - -c
+      - |
+        while true; do 
+          curl -s http://localhost:80 > /dev/null && echo "Main-app is healthy and running!" || echo "Main-app is not running...!"
+          sleep 5
+        done        
