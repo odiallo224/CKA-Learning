@@ -1,0 +1,22 @@
+---
+apiVersion: v1
+kind: Pod
+metadata:
+  name: hostpath-pod-3
+  labels:
+    app: hostpath-test
+spec:
+  nodeName: my-first-cluster-worker
+  volumes:
+    - name: host-volume
+      hostPath:
+        path: /tmp/hostfile
+        type: FileOrCreate  
+  containers:
+    - name: hp-container
+      image: busybox
+      command: ["sh", "-c", "cat /data && sleep 3600"]
+      volumeMounts:
+      - mountPath: /data
+        name: host-volume  
+
