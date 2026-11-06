@@ -1,0 +1,46 @@
+---
+apiVersion: apps/v1
+kind: Deployment
+metadata:
+  name: frontend-cm-deploy
+  labels:
+    test: configmap-env
+spec:
+  replicas: 1
+  selector:
+    matchLabels:
+      app: frontend
+  template:
+    metadata:
+      labels:
+        app: frontend
+    spec:
+      containers:
+      - name: nginx-cont
+        image: nginx
+        env:
+        - name: APP
+          valueFrom:
+            configMapKeyRef:
+              name: frontend-cm1     # ConfigMap name we are referencing
+              key: APP_NAME          # Key from the configMap
+        - name: ENVIRONMENT
+          valueFrom:
+            configMapKeyRef:
+              name: frontend-cm1
+              key: ENVIRONMENT_NAME         
+
+---
+apiVersion: v1
+kind: Service
+metadata:
+  name: cm1-frontend-svc
+spec:
+  selector:
+    app: frontend
+  type: NodePort
+  ports:
+    - protocol: TCP
+      port: 80
+      targetPort: 80
+      nodePort: 31000    

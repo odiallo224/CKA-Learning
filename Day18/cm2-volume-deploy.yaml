@@ -1,0 +1,56 @@
+---
+apiVersion: apps/v1
+kind: Deployment
+metadata:
+  name: cm-as-volume
+spec:
+  replicas: 1
+  selector:
+    matchLabels:
+      app: frontend
+  template:
+    metadata:
+      labels:
+        app: frontend
+    spec:
+      containers:
+      - name: nginx-cm
+        image: nginx
+        env:
+          - name: APP
+            valueFrom:
+              configMapKeyRef:
+                name: cm-volume
+                key: APP_NAME
+          - name: ENVIRONMENT
+            valueFrom:
+              configMapKeyRef:
+                name: cm-volume
+                key: ENVIRONMENT_NAME        
+        volumeMounts:
+          - name: html-cm-volume
+            mountPath: /usr/share/nginx/html/  #ConfigMap as volume is usually mounted to Directory, so mounting it to a file might result in error for pod creation
+            #subPath: index.html              #This will copy the index.html only to /usr/share/nginx/html/index.html... No dynamic update 
+            readOnly: true                    #Everything in data section in CM will be copied as files.
+      volumes:
+        - name: html-cm-volume
+          configMap:
+            name: cm-volume
+            items:
+              - key: index.html          #This allows us to copy the index.html file only  to /usr/share/nginx/html directory in the container
+                path: index.html   
+
+---
+apiVersion: v1
+kind: Service
+metadata:
+  name: cm-volume-svc
+spec:
+  type: NodePort
+  selector:
+    app: frontend
+  ports:
+  - protocol: TCP
+    port: 80
+    targetPort: 80
+    nodePort: 31000    
