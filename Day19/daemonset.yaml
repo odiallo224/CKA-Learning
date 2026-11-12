@@ -1,0 +1,40 @@
+---
+apiVersion: apps/v1
+kind: DaemonSet
+metadata:
+  name: ds-test
+  namespace: loggin-ns  
+  labels:
+    test: log-collection
+spec:
+  selector:
+    matchLabels:
+      app: log-app
+  template:
+    metadata:
+      labels:
+        app: log-app
+    spec:
+      tolerations:
+        - key: node-role.kubernetes.io/control-plane
+          operator: Exists
+          effect: NoSchedule  
+      containers:
+        - name: ds-container
+          image: busybox
+          command: ["sh", "-c", "while true; do echo Collecting logs...; sleep 30; done"]  
+          resources:
+            requests:
+              cpu: "25m"
+              memory: "100Mi"
+            limits:
+              cpu: "50m"
+              memory: "150Mi"
+          volumeMounts:
+            - name: ds-vol
+              mountPath: /var/log
+      volumes:
+        - name: ds-vol
+          hostPath:
+            type: Directory 
+            path: /var/log     

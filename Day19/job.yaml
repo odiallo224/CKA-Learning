@@ -1,0 +1,20 @@
+---
+apiVersion: batch/v1
+kind: Job
+metadata:
+  name: job-test
+  labels:
+    app: one-run
+  namespace: loggin-ns
+spec:
+  ttlSecondsAfterFinished: 60  #It deletes the job 60s after it finishes (whether it succeeded or failed) and associated pods eventually
+  completions: 2               #Number of pods that run for the completion of the job. This helps with load distribution. 
+  parallelism: 2               #Number of pods that run concurrently (at the same time) 
+  backoffLimit: 4             #Number of trials if error occurs  before the job is considered failed. Pod recreation
+  template:
+    spec:  
+      containers:
+        - name: job-container
+          image: busybox
+          command: ["sh", "-c", "echo Hello World from Job..!! && sleep 10"]
+      restartPolicy: Never      
